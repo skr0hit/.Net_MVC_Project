@@ -46,4 +46,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: your-dockerhub-username/your-repo-name:latest
+          tags: skr420/MVC_APP:latest
