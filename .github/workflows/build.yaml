@@ -46,4 +46,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: skr420/MVC_APP:latest
+          tags: skr420/mvc_app:latest
