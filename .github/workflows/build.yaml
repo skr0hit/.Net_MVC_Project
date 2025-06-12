@@ -47,3 +47,22 @@ jobs:
         with:
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/mvc_app:${{github.run_id}}
+
+  update-k8s:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update deployment.yaml
+        run: |
+          sed -i "s|image: .*|image: ${{secrets.DOCKER_USERNAME}}/mvc_app:${{github.run_id}}|" Kubernetes/deployment.yaml
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Kubernetes/deployment.yaml
+          git commit -m "Updated Kubernetes deployment.yaml with new image tag"
+          git push
