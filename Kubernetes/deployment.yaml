@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvc-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mvc-app
+  template:
+    metadata:
+      labels:
+        app: mvc-app
+    spec:
+      containers:
+      - name: mvc-app
+        image: skr420/mvc_app:latest
+        ports:
+        - containerPort: 9090
