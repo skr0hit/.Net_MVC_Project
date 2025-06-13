@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: mvc-app
-        image: skr420/mvc_app:15642798934
+        image: skr420/mvc_app:15643410547
         ports:
         - containerPort: 9090
