@@ -66,3 +66,32 @@ jobs:
           git add Kubernetes/deployment.yaml
           git commit -m "Updated Kubernetes deployment.yaml with new image tag"
           git push
+
+  deploy-to-aks:
+    needs: update-k8s
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Azure CLI
+        uses: azure/setup-kubectl@v3
+      
+      - name: Authenticate with AKS
+        run: |
+          az login --service-principal \
+            --username ${{ secrets.AZURE_CLIENT_ID }} \
+            --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+            --tenant ${{ secrets.AZURE_TENANT_ID }}
+          
+          az aks get-credentials --resource-group ${{ secrets.AZURE_RG }} --name ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Apply deployment to AKS
+        run: |
+          kubectl apply -f Kubernetes/deployment.yaml
+          kubectl apply -f Kubernetes/service.yaml
+
+      - name: Verify Deployment
+        run: |
+          kubectl get pods
+          kubectl get svc
