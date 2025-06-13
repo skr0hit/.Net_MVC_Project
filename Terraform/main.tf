@@ -1,28 +1,23 @@
 provider "azurerm" {
   features {}
-
   subscription_id = "09cda0bd-60c6-4722-be9c-25858b5ce1b3"
   use_cli = true  # Allows Terraform to use Azure CLI authentication
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = "aks-resource-group"
-  location = "Central India"
+module "resource_group" {
+  source              = "./modules/resource_group"
+
+  resource_group_name = var.resource_group_name
+  location           = var.location
 }
 
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "my-aks-cluster"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "aksdns"
+module "aks_cluster"{
 
-  default_node_pool {
-    name            = "default"
-    node_count      = 2  # Using 2 nodes
-    vm_size         = "Standard_B2s"  # Free-tier compatible VM size
-  }
+  source = "./modules/aks_cluster"
+  cluster_name = var.cluster_name
+  resource_group_name = var.resource_group_name
+  location = var.location
+  node_count = var.node_count
+  vm_size = var.vm_size
 
-  identity {
-    type = "SystemAssigned"
-  }
 }

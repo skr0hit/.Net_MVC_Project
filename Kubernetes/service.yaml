@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mvc-service
+  namespace: skr-namespace
 spec:
   selector:
     app: mvc-app
