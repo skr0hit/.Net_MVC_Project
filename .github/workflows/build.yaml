@@ -88,10 +88,10 @@ jobs:
 
       - name: Apply deployment to AKS
         run: |
-          kubectl apply -f Kubernetes/deployment.yaml
-          kubectl apply -f Kubernetes/service.yaml
+          kubectl apply -f Kubernetes/deployment.yaml -n skr-namespace
+          kubectl apply -f Kubernetes/service.yaml -n skr-namespace
 
       - name: Verify Deployment
         run: |
-          kubectl get pods
-          kubectl get svc
+          kubectl get pods -n skr-namespace
+          kubectl get svc -n skr-namespace
